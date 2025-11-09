@@ -1,0 +1,1 @@
+self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open('blw-v11-hf6-hf4-hotfix3').then(c=>c.addAll(['/','/index.html','/style.css','/app.js','/manifest.webmanifest','/logo.png'])))});self.addEventListener('activate',e=>{self.clients.claim()});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))) });

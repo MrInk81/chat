@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "public": "buergerliste-wimpassing-chat",
+    "default": "buergerliste-wimpassing-chat"
+  },
+  "targets": {},
+  "etags": {}
+}

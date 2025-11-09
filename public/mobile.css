@@ -1,0 +1,1002 @@
+/* ========== MOBILE OVERRIDES FÜR BÜRGERLISTE CHAT ========== */
+/* greift auf Phones / kleine Breite */
+@media (max-width: 600px) {
+
+  /* Grundlayout: App wird statt Desktop-Layout zu "Header oben, Chat, Composer unten" */
+  .app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;
+    background: #fff;
+  }
+
+  /* --- HEADER BEREICH OBEN -------------------------------- */
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    padding: 8px 12px;
+    gap: 8px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  /* Logo + Burger + Titel untereinander statt nebeneinander */
+  .brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+  }
+
+  .burger {
+    order: -1;
+    font-size: 16px;
+    line-height: 20px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background: #fff;
+  }
+
+  .brand img {
+    max-width: 64px;
+    height: auto;
+    margin: 6px auto;
+  }
+
+  .brand .title {
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 600;
+    text-align: center;
+    max-width: 90%;
+    word-break: break-word;
+  }
+
+  /* "App installieren", "Bürger online", "Admins online", Postfach" */
+  .live {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 10px;
+    max-width: 100%;
+  }
+
+  .live button,
+  .live .stat,
+  #installBtn,
+  #notifBtn {
+    font-size: 14px;
+    line-height: 18px;
+    padding: 6px 10px;
+    border-radius: 10px;
+  }
+
+  #notifBtn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* --- SEITENLEISTE (RÄUME / ONLINE / FOOTER) ------------- */
+  /* Auf Desktop ist das ein Aside. Auf Handy wollen wir das NICHT permanent sichtbar.
+     Einfach ausblenden in der Standard-Ansicht. Burger kann später Sidebar öffnen per JS. */
+  .side {
+    display: none;
+  }
+
+  /* --- CHAT-BEREICH / ROOMBAR ----------------------------- */
+  .chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: #fff;
+  }
+
+  /* Obere Leiste im Chat: Raumname, Link zur Homepage, Regeln/Logout */
+  .roombar {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .roomname {
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 20px;
+    word-break: break-word;
+  }
+
+  .centerlink a {
+    color: #0044cc;
+    text-decoration: underline;
+    font-size: 14px;
+    line-height: 18px;
+    word-break: break-word;
+  }
+
+  .roomactions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    font-size: 13px;
+    line-height: 17px;
+  }
+
+  /* --- WASSERZEICHEN LOGO -------------------------------- */
+  .chat-watermark {
+    position: absolute;
+    right: 10%;
+    bottom: 110px; /* über der Composer-Leiste */
+    width: 40vw;
+    max-width: 180px;
+    opacity: 0.15;
+    pointer-events: none;
+  }
+
+  /* --- NACHRICHTENLISTE ---------------------------------- */
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 12px;
+    padding-bottom: 140px; /* Platz für die feste Composer-Leiste */
+  }
+
+  /* --- COMPOSER (Eingabe unten) --------------------------- */
+  .composer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background: #fff;
+    border-top: 1px solid #ddd;
+    padding: 12px;
+
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    align-items: center;
+
+    z-index: 9999;
+  }
+
+  /* "Antwort an ..." Pill */
+  .replyPill {
+    order: -1;
+    width: 100%;
+    background: #f5f5f5;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 13px;
+    line-height: 16px;
+    padding: 6px 8px;
+    margin-bottom: 6px;
+  }
+
+  /* Eingabefeld */
+  #msgInput {
+    flex: 1;
+    min-height: 44px;
+    font-size: 16px;
+    line-height: 20px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+  }
+
+  /* Senden-Button */
+  #sendBtn {
+    min-height: 44px;
+    font-size: 16px;
+    line-height: 20px;
+    padding: 10px 14px;
+    border-radius: 10px;
+  }
+
+  /* --- INSTALL-BANNER ------------------------------------ */
+  .install-banner {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 64px;  /* sitzt knapp über dem Composer */
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,.2);
+    padding: 12px;
+    margin: 0 12px;
+    font-size: 14px;
+    line-height: 18px;
+    z-index: 9998;
+  }
+
+  .install-text {
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  #installBannerBtn {
+    width: 100%;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  /* --- MODALS (WELCOME / PM / WARN / NOTIF) --------------- */
+  .modal {
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  .modal .card {
+    max-width: 90vw !important;
+    width: 90vw !important;
+    max-height: 85vh !important;
+    border-radius: 16px !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,.4);
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    padding-bottom: 16px;
+  }
+
+  .modal .card .closeX,
+  .modal .card .minBtn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 24px;
+    line-height: 24px;
+    width: 36px;
+    height: 36px;
+    border-radius: 18px;
+    background:#fff;
+    border:1px solid #ccc;
+    color:#000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:10;
+  }
+
+  .modal .card .actions {
+    position: relative;
+    margin-bottom: 12px;
+  }
+}
+
+
+@media (max-width:600px){
+
+  /* HEADER compact rows */
+  .header{
+    padding:8px 12px 6px;
+    gap:6px;
+    border-bottom:1px solid #e0e0e0;
+    background:#fff;
+  }
+
+  /* first row: burger left + title right */
+  .brand{
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+  }
+  .brand img{
+    display:none;
+  }
+  .burger{
+    display:inline-flex;
+    align-items:center;
+    font-size:16px;
+    line-height:20px;
+    padding:8px 12px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    background:#fff;
+  }
+  .brand .title{
+    font-size:16px;
+    line-height:18px;
+    font-weight:600;
+    text-align:right;
+    flex:1;
+    margin-left:12px;
+  }
+
+  /* second row: online stats + postfach in einer Zeile */
+  .live{
+    order:2;
+    width:100%;
+    display:flex;
+    flex-wrap:nowrap;
+    justify-content:flex-start;
+    align-items:center;
+    gap:8px;
+    flex-shrink:0;
+  }
+  .live .stat{
+    font-size:14px;
+    line-height:16px;
+    padding:6px 10px;
+    border-radius:10px;
+  }
+  #notifBtn{
+    padding:6px 10px;
+    border-radius:10px;
+  }
+  #notifBtn svg{
+    width:20px;
+    height:20px;
+  }
+
+  /* gradient bar: hide homepage link on phone */
+  .centerlink{
+    display:none;
+  }
+
+  /* sidebar overlay on phone when burger opened */
+  .side{
+    display:none;
+  }
+  .side.open{
+    display:block;
+    position:fixed;
+    top:0;
+    left:0;
+    width:80%;
+    max-width:320px;
+    height:100vh;
+    background:#fff;
+    box-shadow:2px 0 12px rgba(0,0,0,.3);
+    border-right:1px solid #ccc;
+    z-index:1000;
+    overflow:auto;
+    padding-bottom:80px;
+  }
+
+  /* mobile-only homepage link in menu */
+  .mobileOnlyHome{
+    display:block;
+    text-decoration:underline;
+    font-weight:600;
+    color:#06f;
+    padding:4px 12px 8px 12px;
+    border:none;
+    margin-left:0;
+  }
+}
+@media (min-width:600px){
+  .mobileOnlyHome{display:none;}
+}
+
+/* Welcome modal tweaks */
+@media (max-width:600px){
+  #welcomeModal .card{
+    padding:16px;
+    max-height:none;
+  }
+  #welcomeModal .actions .btn{
+    font-size:14px;
+    line-height:16px;
+    padding:8px 10px;
+  }
+}
+
+/* === v13 responsive additions === */
+
+/* mobile & tablet hide sidebar and show mobileRoomsWrapper */
+@media (max-width:1024px){
+
+  /* Sidebar ausblenden auf kleineren Screens */
+  .side{
+    display:none !important;
+  }
+
+  /* Header Blöcke untereinander etwas kompakter */
+  .header{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border-bottom:1px solid #e0e0e0;
+  }
+
+  /* erste Zeile im Header (Logo + Titel + evtl. Burger) */
+  .brand{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:100%;
+    text-align:center;
+  }
+  .brand img{
+    max-width:48px;
+    height:auto;
+  }
+  .brand .title{
+    font-size:16px;
+    line-height:20px;
+    font-weight:600;
+  }
+
+  /* zweite Zeile: Online-Infos + Postfach kompakt */
+  .live{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:6px 10px;
+    width:100%;
+  }
+  .live .stat{
+    font-size:14px;
+    line-height:18px;
+    padding:6px 10px;
+    border-radius:10px;
+  }
+  #notifBtn{
+    border:none;
+    background:#fff;
+    border-radius:999px;
+    padding:6px 10px;
+  }
+  #notifBtn svg{
+    width:20px;
+    height:20px;
+  }
+
+  /* dritte Zeile: Räume im Rahmen */
+  .mobileRoomsWrapper{
+    display:block;
+    width:100%;
+    border:1px solid #ccc;
+    border-radius:10px;
+    padding:8px;
+    background:#fff;
+  }
+
+  /* Handy (schmal): 2x2 Raster */
+  .mobileRooms{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+  }
+  .mobileRooms .room{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:6px 8px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    background:#fafafa;
+    font-size:13px;
+    line-height:16px;
+  }
+  .mobileRooms .room div{
+    text-align:center;
+    font-size:13px;
+    line-height:16px;
+  }
+
+  /* Chat-Bar oben kompakt, einzeilig */
+  .roombar{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    text-align:left;
+    border-bottom:1px solid #e0e0e0;
+  }
+  .roombar .centerlink{
+    display:none !important;
+  }
+  .roomactions{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    line-height:16px;
+  }
+
+  /* Wasserzeichen mittig */
+  .chat{
+    position:relative;
+  }
+  .chat-watermark{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    max-width:70%;
+    width:55vmin;
+    opacity:.25;
+    pointer-events:none;
+    z-index:0;
+  }
+}
+
+/* Tablet speziell (zw. 601px und 1024px): Räume in einer Zeile */
+@media (min-width:601px) and (max-width:1024px){
+  .mobileRooms{
+    display:flex;
+    flex-wrap:nowrap;
+    justify-content:center;
+    gap:6px;
+  }
+  .mobileRooms .room{
+    flex:1;
+    white-space:nowrap;
+  }
+}
+
+/* Desktop: Sidebar sichtbar, mobileRoomsWrapper ausblenden */
+@media (min-width:1025px){
+  .side{
+    display:flex;
+  }
+  .mobileRoomsWrapper{
+    display:none;
+  }
+}
+
+/* v14: burger überall ausblenden */
+.burger{
+  display:none !important;
+}
+
+
+/* v17 final mobile+tablet layout */
+@media (max-width:1024px){
+
+  /* HEADER TOP AREA */
+  .header{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:6px;
+    padding:8px 12px;
+    border-bottom:1px solid #e0e0e0;
+    background:#fff;
+  }
+
+  /* Row 1: Logo + Titel + Postfach rechts */
+  .brand{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    flex-wrap:nowrap;
+    gap:8px;
+    width:100%;
+  }
+  .brand img{
+    display:block !important;
+    max-width:40px;
+    height:auto;
+    margin:0;
+  }
+  .brand .title{
+    white-space:nowrap;
+    font-size:15px;
+    line-height:18px;
+    font-weight:600;
+    color:#000;
+    text-align:left;
+  }
+
+  #notifBtn{
+    position:absolute;
+    top:8px;
+    right:8px;
+    min-width:auto;
+    min-height:auto;
+    padding:6px 10px;
+    line-height:1;
+    border:1px solid #ccc;
+    border-radius:18px;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  #notifBtn svg{
+    width:20px;
+    height:20px;
+  }
+
+  /* Row 2: Online-Badges direkt unter dem Titel */
+  .live{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:flex-start;
+    gap:6px 10px;
+    width:100%;
+    padding-top:4px;
+    padding-right:48px;
+  }
+  .live .stat{
+    font-size:14px;
+    line-height:18px;
+    padding:6px 10px;
+    border-radius:10px;
+  }
+
+  /* RÄUME-BOX */
+  .mobileRoomsWrapper{
+    display:block;
+    width:100%;
+    border:1px solid #ddd;          /* heller Rahmen */
+    border-radius:10px;
+    padding:4px;                    /* enger wie im Screen */
+    background:#fff;
+  }
+
+  /* HANDY: 2x2 GRID */
+  .mobileRooms{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+    width:100%;
+  }
+
+  .mobileRooms .room{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:8px;
+    border:1px solid #ddd;
+    border-radius:6px;              /* sanftere Ecken */
+    background:#fafafa;
+    text-align:center;
+  }
+  .mobileRooms .room .icon{
+    font-size:16px;
+    line-height:16px;
+  }
+  .mobileRooms .room div{
+    white-space:nowrap;
+    font-size:12px;                 /* kleinere Schrift wie dein Screen */
+    line-height:14px;
+    font-weight:500;
+    text-align:center;
+  }
+
+  /* REGENBOGEN-BALKEN unterhalb der Räume-Box */
+  .roombar{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    text-align:left;
+    border-bottom:1px solid #e0e0e0;
+  }
+  .roombar .centerlink{
+    display:none !important;
+  }
+  .roomactions{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    line-height:16px;
+  }
+
+  /* CHAT-BEREICH */
+  .chat{
+    position:relative;
+  }
+  .chat-watermark{
+    position:absolute;
+    top:50%;                        /* exakt mittig im Chatbereich */
+    left:50%;
+    transform:translate(-50%, -50%);
+    max-width:70%;
+    width:55vmin;
+    opacity:.25;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* COPYRIGHT FIXIERT UNTEN RECHTS */
+  .mobileCopyright{
+    position:fixed;
+    right:8px;
+    bottom:70px;                    /* sitzt oberhalb des Eingabefelds */
+    font-size:10px;
+    line-height:12px;
+    color:#777;
+    text-align:right;
+    z-index:9999;
+    background:transparent;
+    pointer-events:none;
+  }
+
+  /* Burger komplett weg */
+  .burger{
+    display:none !important;
+  }
+
+  /* Sidebar ausblenden auf klein */
+  .side{
+    display:none !important;
+  }
+}
+
+/* TABLET: 1x4 Reihe für Räume */
+@media (min-width:601px) and (max-width:1024px){
+  .mobileRooms{
+    display:flex;
+    flex-wrap:nowrap;
+    justify-content:center;
+    gap:6px;
+    width:100%;
+  }
+  .mobileRooms .room{
+    flex:1;
+  }
+}
+
+/* DESKTOP so lassen wie es ist */
+@media (min-width:1025px){
+  .mobileRoomsWrapper{
+    display:none;
+  }
+  .mobileCopyright{
+    display:none;
+  }
+  .side{
+    display:flex;
+  }
+}
+
+/* v30 */
+
+/* 1. badges (bürger/admin) ausblenden auf mobile+tablet, postfach behalten */
+@media (max-width:1024px){
+  .live .stat{
+    display:none !important;
+  }
+}
+
+/* 2. postfach styling mobile+tablet */
+@media (max-width:1024px){
+  #notifBtn{
+    position:absolute !important;
+    top:0px !important;
+    right:8px !important;
+    min-width:auto !important;
+    min-height:auto !important;
+    padding:4px 8px !important;
+    line-height:1 !important;
+    border:1px solid #ccc !important;
+    border-radius:16px !important;
+    background:#fff !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+  }
+  #notifBtn .badge{
+    position:absolute !important;
+    top:-4px !important;
+    right:-4px !important;
+    background:#d00 !important;
+    color:#fff !important;
+    font-size:11px !important;
+    line-height:1 !important;
+    min-width:18px !important;
+    height:18px !important;
+    padding:2px 5px !important;
+    border-radius:9999px !important;
+    font-weight:600 !important;
+    text-align:center !important;
+    display:none; /* JS setzt inline-block wenn count>0 */
+  }
+}
+
+/* 3. handy feinkorrektur: 5% runter, 5% nach links */
+@media (max-width:600px){
+  #notifBtn{
+    top:5px !important;
+    right:13px !important;
+  }
+}
+
+/* 4. chat-scroll fix mobil+tablet:
+      - chathöhe = viewport minus header grob ~180px
+      - letzte nachricht steht direkt über composer
+*/
+@media (max-width:1024px){
+  .chat{
+    display:flex !important;
+    flex-direction:column !important;
+    height:calc(100vh - 180px) !important;
+    max-height:calc(100vh - 180px) !important;
+    overflow:hidden !important;
+  }
+  .messages{
+    flex:1 1 auto !important;
+    min-height:0 !important;
+    overflow-y:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-behavior:smooth !important;
+  }
+  #composer{
+    flex:0 0 auto !important;
+  }
+}
+
+/* v36 base we keep */
+
+/* 1. badges aus mobile/tablet */
+@media (max-width:1024px){
+  .live .stat{
+    display:none !important;
+  }
+}
+
+/* 2. postfach-bubble mobile/tablet */
+@media (max-width:1024px){
+  #notifBtn{
+    position:absolute !important;
+    top:0px !important;
+    right:8px !important;
+    min-width:auto !important;
+    min-height:auto !important;
+    padding:4px 8px !important;
+    line-height:1 !important;
+    border:1px solid #ccc !important;
+    border-radius:16px !important;
+    background:#fff !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    z-index:1000 !important;
+  }
+  #notifBtn .badge{
+    position:absolute !important;
+    top:-4px !important;
+    right:-4px !important;
+    background:#d00 !important;
+    color:#fff !important;
+    font-size:11px !important;
+    line-height:1 !important;
+    min-width:18px !important;
+    height:18px !important;
+    padding:2px 5px !important;
+    border-radius:9999px !important;
+    font-weight:600 !important;
+    text-align:center !important;
+    display:none; /* JS -> inline-block bei unread>0 */
+  }
+}
+
+/* 3. notif pos fine nur handy */
+@media (max-width:600px){
+  #notifBtn{
+    top:5px !important;
+    right:13px !important;
+  }
+}
+
+/* 4. tablet-layer (>=600 && <=1024px): copyright hinter bubbles absolut über composer */
+@media (min-width:600px) and (max-width:1024px){
+  .chat{
+    position:relative !important;
+    padding-bottom:0 !important;
+  }
+  .messages{
+    position:relative !important;
+    z-index:1 !important;
+    overflow-y:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-behavior:smooth !important;
+    padding-bottom:90px !important;
+  }
+  .composer{
+    position:fixed !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:0 !important;
+    z-index:9999 !important;
+    width:100% !important;
+  }
+  .chat-watermark{
+    pointer-events:none !important;
+    z-index:0 !important;
+  }
+  .mobileCopyright{
+    position:absolute !important;
+    right:8px !important;
+    bottom:90px !important;
+    font-size:10px !important;
+    line-height:12px !important;
+    color:#777 !important;
+    text-align:right !important;
+    background:transparent !important;
+    pointer-events:none !important;
+    z-index:0 !important;
+    display:block !important;
+    opacity:.6 !important;
+  }
+}
+
+/* 5. handy-layer (<600px): copyright fixed unten rechts unter bubbles */
+@media (max-width:600px){
+  .chat{
+    position:relative !important;
+    padding-bottom:0 !important;
+  }
+  .messages{
+    position:relative !important;
+    z-index:1 !important;
+    overflow-y:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+    scroll-behavior:smooth !important;
+    padding-bottom:90px !important;
+  }
+  .composer{
+    position:fixed !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:0 !important;
+    z-index:9999 !important;
+    width:100% !important;
+  }
+  .chat-watermark{
+    pointer-events:none !important;
+    z-index:0 !important;
+  }
+  .mobileCopyright{
+    position:fixed !important;
+    right:8px !important;
+    bottom:70px !important;
+    font-size:10px !important;
+    line-height:12px !important;
+    color:#777 !important;
+    text-align:right !important;
+    background:transparent !important;
+    pointer-events:none !important;
+    z-index:0 !important;
+    display:block !important;
+    opacity:.6 !important;
+  }
+}
+
+/* v40 extra mobile-only padding fix so last msg sits above composer */
+@media (max-width:600px){
+  .messages{
+    padding-bottom:110px !important;
+    max-height:calc(100vh - 220px) !important;
+  }
+}

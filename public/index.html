@@ -1,0 +1,169 @@
+<!DOCTYPE html><html lang="de"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/><meta http-equiv="Pragma" content="no-cache"/><meta http-equiv="Expires" content="0"/><link rel="manifest" href="/manifest.webmanifest"/>
+<link rel="stylesheet" href="/style.v103.css"/>
+<link rel="stylesheet" href="/mobile.css"/>
+<link rel="stylesheet" href="style.css">
+<title>Bürgerliste Chat</title></head><body>
+<div class="app">
+  <div class="header">
+    <div class="brand">
+      <button class="burger" id="burger">☰ Räume</button>
+      <img src="/logo.png" alt="Logo"/>
+      <div><div class="title">Bürgerliste Wimpassing</div></div>
+    </div>
+    <div class="live">
+      <button id="installBtn" style="display:none">App installieren</button>
+      <div class="stat" id="statCitizens">🟢 <span class="label">Bürger online:</span><span id="citizensOnline">0</span></div>
+      <div class="stat" id="statAdmins">🛡️ <span class="label">Admins online:</span><span id="adminsOnline">0</span></div>
+      <button id="notifBtn" title="Postfach" aria-label="Postfach">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 7h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/>
+          <path d="M3 7l9 6 9-6"/>
+        </svg>
+        <span id="notifBadge" class="badge" style="display:none">0</span>
+      </button>
+    </div>
+<!-- mobile / tablet room quick links -->
+<div class="mobileRoomsWrapper">
+  <div class="mobileRooms">
+    <div class="room"><span class="icon">❓</span><div>Fragen an die Bürgerliste</div></div>
+    <div class="room"><span class="icon">🗳️</span><div>Wahlen &amp; Politik</div></div>
+    <div class="room"><span class="icon">💬</span><div>Plauderecke</div></div>
+    <div class="room"><span class="icon">🏟️</span><div>Vereine</div></div>
+  </div>
+</div>
+
+  </div>
+  <div id="mobileCopyright" class="mobileCopyright">
+  © 2025 Bürgerliste Wimpassing<br/>
+  Betreuung &amp; Entwicklung: Christian Bachtrögler<br/>
+  Web &amp; Social Media Administration
+</div>
+
+
+  <aside class="side" id="sidebar">
+    <div class="section-title">Räume</div>
+    <div class="rooms" id="rooms"></div>
+<a class="mobileOnlyHome" id="homeLinkMobile" href="https://www.example.com" target="_blank" rel="noopener">Homepage</a>
+
+
+    <div class="section-title">Online</div>
+    <div class="online" id="onlineList"></div>
+
+    <div class="footer">© 2025 Bürgerliste Wimpassing<br/>
+      Betreuung &amp; Entwicklung: Christian Bachtrögler<br/>Web &amp; Social Media Administration
+    </div>
+  </aside>
+
+  <main class="chat">
+    <div class="roombar">
+      <div class="roomname" id="roomName">—</div>
+      <div class="centerlink"><a id="homepageLink" href="https://www.buergerliste-wimpassing.at" target="_blank" rel="noopener">Hier geht’s zur Homepage</a></div>
+      
+      <div class="roomactions">
+        <a id="rulesLink">Chatregeln</a>
+        <span style="margin:0 8px">·</span>
+        <a id="logoutLink" style="display:none">Abmelden</a>
+      </div>
+    </div>
+    <img class="chat-watermark" src="/logo.png" alt="Bürgerliste Wimpassing Logo"/>
+    <div class="messages" id="messages"></div>
+    <div class="composer" id="composer">
+      <div class="replyPill" id="replyPill">Antwort an <b id="replyName"></b> <span class="cancel" id="replyCancel">×</span></div>
+      <input id="msgInput" type="text" placeholder="Nachricht schreiben…" autocomplete="off"/>
+      <button id="sendBtn">Senden</button>
+    </div>
+    <div class="install-banner" id="installBanner" style="display:none"><div class="install-text">Zum Startbildschirm hinzufügen?</div><button id="installBannerBtn">Installieren</button></div>
+  </main>
+</div>
+
+<!-- Welcome / Regeln Modal -->
+<div class="modal" id="welcomeModal">
+  <div class="card">
+    <button class="closeX" id="welcomeCloseX">×</button>
+    <h2>Willkommen im Bürgerliste Chat</h2>
+    <p><b>Chatregeln &amp; Verhalten</b><br/>
+    • Freundlich &amp; respektvoll bleiben – keine Beleidigungen/Schimpfwörter<br/>
+    • Keine Werbung, Spam oder Off-Topic in falschen Räumen<br/>
+    • Datenschutz beachten – keine privaten Daten öffentlich posten<br/>
+    • Themen passend zu den Räumen posten (siehe unten)<br/>
+    <i>Tipp: Wenn du dich umloggen möchtest, klicke oben im Chat auf <b>Chatregeln</b>.</i></p>
+    <p><b>Räume &amp; Inhalte</b><br/>
+    ❓ <b>Fragen an die Bürgerliste</b>: direkte Fragen, Anliegen, Service.<br/>
+    🗳️ <b>Wahlen &amp; Politik</b>: Programme, Abstimmungen, politische Themen.<br/>
+    💬 <b>Plauderecke</b>: Smalltalk, Off-Topic (ohne Beleidigungen).<br/>
+🏟️ <b>Vereine</b>: Ankündigungen, Ergebnisse & Termine – z.&nbsp;B. Fußball, Feuerwehr, Tennis, u.&nbsp;a.</p>
+    <p>Farben: <b style="color:#cc0000">Administrator</b>, <b style="color:#7f6db5">Moderation</b>, <b class="google-text">BürgerInnen (Google)</b>, <span style="color:#777">Anonym</span></p>
+    <div class="actions">
+      <button class="btn primary" id="googleBtn">Mit Google anmelden</button>
+      <button class="btn" id="anonBtn">Anonym starten</button>
+      <button class="btn" id="closeWelcome">× Schließen (nur lesen)</button>
+    </div>
+  </div>
+</div>
+
+<!-- PM Modal -->
+<div class="modal" id="pmModal">
+  <div class="card">
+    <button class="minBtn" id="pmMin">–</button><button class="closeX" id="pmCloseX">×</button>
+    <h2 id="pmTitle">Private Nachricht</h2>
+    <div id="pmThread" style="max-height:50vh;overflow:auto;border:1px solid #eee;border-radius:12px;padding:10px;margin:10px 0"></div>
+    <div class="actions">
+      <input id="pmInput" type="text" placeholder="Antwort schreiben…" style="flex:1;min-width:200px;padding:10px;border-radius:10px;border:1px solid #ddd"/>
+      <button class="btn primary" id="pmSend">Senden</button>
+      <button class="btn" id="pmConfirm">Beenden (Bestätigen)</button>
+    </div>
+  </div>
+</div>
+
+<!-- Warning Modal -->
+<div class="modal" id="warnModal">
+  <div class="card" id="warnCard">
+    <button class="closeX" id="warnCloseX">×</button>
+    <h2 id="warnTitle">Verwarnung</h2>
+    <p id="warnText"></p>
+    <div class="actions"><button class="btn primary" id="warnOk">Verstanden</button></div>
+  </div>
+</div>
+
+<!-- Notification Center -->
+<div class="modal" id="notifModal">
+  <div class="card" style="max-width:560px">
+    <button class="closeX" id="notifCloseX">×</button>
+    <h2>Postfach</h2>
+    <div id="notifCenter" style="max-height:60vh;overflow:auto"></div>
+  </div>
+</div>
+
+<script type="module" src="/config.js"></script>
+<script type="module" src="/app.v103.js"></script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js'))}</script>
+
+
+<script>
+(function(){
+  const ids = ['fragen','politik','plaudern','vereine'];
+  const buttons = document.querySelectorAll('.mobileRooms .room');
+  buttons.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      if (window.activateRoom) {
+        window.activateRoom(ids[i]);
+      }
+    });
+  });
+})();
+</script>
+<script>
+(function(){
+  const burger=document.getElementById('burger');
+  const sidebar=document.getElementById('sidebar');
+  if(burger && sidebar){
+    burger.addEventListener('click', ()=>{
+      sidebar.classList.toggle('open');
+    });
+  }
+})();
+</script>
+
+</body></html>
