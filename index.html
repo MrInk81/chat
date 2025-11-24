@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bürgerliste Wimpassing – Chat</title>
+  <style>
+    :root {
+      --koralle:#d36b5f;
+      --koralle-dark:#ba5e54;
+      --smaragd:#0b4f52;
+      --lavendel:#8d78c6;
+      --hellgrau:#f5f7f8;
+      --hellgrau2:#eef1f2;
+    }
+    * {
+      box-sizing:border-box;
+    }
+    body {
+      margin:0;
+      font-family:Arial, sans-serif;
+      background:var(--hellgrau);
+    }
+    header {
+      display:flex;
+      align-items:center;
+      padding:10px 20px;
+      background:var(--smaragd);
+      color:white;
+      height:70px;
+    }
+    header img {
+      height:55px;
+      margin-right:15px;
+    }
+    header h1 {
+      margin:0;
+      font-size:24px;
+      font-weight:700;
+    }
+    .tabs {
+      display:flex;
+      background:var(--hellgrau2);
+      padding:10px;
+      gap:10px;
+      border-bottom:2px solid var(--koralle);
+    }
+    .tab {
+      padding:8px 14px;
+      border-radius:8px;
+      background:var(--hellgrau2);
+      cursor:pointer;
+      font-size:14px;
+      border:1px solid transparent;
+      color:#333;
+    }
+    .tab.active {
+      background:var(--koralle);
+      color:white;
+      border-color:var(--koralle-dark);
+    }
+    .container {
+      display:flex;
+      height:calc(100vh - 70px - 52px);
+    }
+    .sidebar {
+      width:260px;
+      background:var(--hellgrau2);
+      padding:16px 10px;
+      border-right:2px solid var(--koralle);
+    }
+    .sidebar button {
+      width:100%;
+      padding:10px 12px;
+      margin-bottom:10px;
+      border:none;
+      border-radius:10px;
+      background:var(--koralle);
+      color:white;
+      font-size:14px;
+      cursor:pointer;
+    }
+    .sidebar button:hover {
+      background:var(--koralle-dark);
+    }
+    .main {
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      min-width:0;
+    }
+    .chat-header {
+      padding:10px 16px;
+      background:white;
+      border-bottom:2px solid var(--lavendel);
+      font-size:18px;
+      font-weight:bold;
+    }
+    .messages {
+      flex:1;
+      overflow-y:auto;
+      padding:16px;
+    }
+    .msg {
+      padding:8px 12px;
+      background:white;
+      border-radius:10px;
+      margin-bottom:8px;
+      box-shadow:0 1px 3px rgba(0,0,0,0.08);
+      max-width:75%;
+      font-size:14px;
+    }
+    .msg.me {
+      margin-left:auto;
+      background:var(--lavendel);
+      color:white;
+    }
+    .msg .meta {
+      font-size:11px;
+      opacity:0.8;
+      margin-bottom:2px;
+    }
+    .input-area {
+      padding:10px;
+      background:var(--hellgrau2);
+      display:flex;
+      gap:8px;
+    }
+    .input-area input {
+      flex:1;
+      padding:10px;
+      border-radius:8px;
+      border:1px solid #ccc;
+      font-size:14px;
+    }
+    .input-area button {
+      padding:10px 14px;
+      border-radius:8px;
+      border:none;
+      background:var(--koralle);
+      color:white;
+      cursor:pointer;
+      font-size:14px;
+    }
+    .input-area button:disabled {
+      opacity:0.5;
+      cursor:default;
+    }
+
+    /* Regeln-Overlay */
+    #rules-overlay {
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.35);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:1000;
+    }
+    .rules-box {
+      background:white;
+      max-width:650px;
+      width:90%;
+      max-height:90vh;
+      overflow-y:auto;
+      border-radius:16px;
+      box-shadow:0 8px 25px rgba(0,0,0,0.25);
+      padding:20px 24px 18px;
+    }
+    .rules-header {
+      display:flex;
+      align-items:center;
+      margin-bottom:10px;
+      gap:10px;
+    }
+    .rules-header img {
+      height:60px;
+    }
+    .rules-header h2 {
+      margin:0;
+      font-size:20px;
+      color:var(--smaragd);
+    }
+    .rules-content p {
+      font-size:14px;
+      margin:6px 0;
+    }
+    .rules-content ul {
+      padding-left:20px;
+      margin:4px 0 10px;
+      font-size:14px;
+    }
+    .rules-footer {
+      margin-top:10px;
+      border-top:1px solid var(--hellgrau2);
+      padding-top:10px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .rules-footer label {
+      font-size:13px;
+    }
+    .login-buttons {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:4px;
+    }
+    .login-buttons button {
+      flex:1 1 140px;
+      padding:8px 10px;
+      border-radius:8px;
+      border:none;
+      cursor:pointer;
+      font-size:14px;
+      color:white;
+    }
+    .btn-google { background:#db4437; }
+    .btn-email { background:var(--lavendel); }
+    .btn-anon { background:var(--koralle); }
+
+    .login-buttons button:disabled {
+      opacity:0.5;
+      cursor:default;
+    }
+
+    @media (max-width: 800px) {
+      .container {
+        flex-direction:column;
+      }
+      .sidebar {
+        width:100%;
+        border-right:none;
+        border-bottom:2px solid var(--koralle);
+        display:flex;
+        gap:8px;
+        justify-content:space-between;
+      }
+      .sidebar button {
+        flex:1;
+        padding:8px;
+        font-size:13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="BLW Logo">
+    <h1>Bürgerliste Wimpassing</h1>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" data-room="fragen">Fragen an die Bürgerliste</div>
+    <div class="tab" data-room="wahlen">Wahlen &amp; Politik</div>
+    <div class="tab" data-room="plauderecke">Plauderecke</div>
+    <div class="tab" data-room="vereine">Vereine</div>
+  </div>
+
+  <div class="container" id="app-container" style="display:none;">
+    <div class="sidebar">
+      <button type="button">💬 Chat</button>
+      <button type="button">📨 Private Nachrichten</button>
+      <button type="button">👥 Nutzer</button>
+      <button type="button" id="btnLogout">🚪 Logout</button>
+    </div>
+    <div class="main">
+      <div class="chat-header" id="room-title">Fragen an die Bürgerliste</div>
+      <div class="messages" id="messages"></div>
+      <div class="input-area">
+        <input id="chatInput" placeholder="Nachricht schreiben…" />
+        <button id="sendBtn">Senden</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Regeln & Login Overlay -->
+  <div id="rules-overlay">
+    <div class="rules-box">
+      <div class="rules-header">
+        <img src="logo.png" alt="BLW Logo">
+        <h2>Chatregeln der Bürgerliste Wimpassing</h2>
+      </div>
+      <div class="rules-content">
+        <p><strong>Bitte lies diese Regeln aufmerksam durch. Mit der Nutzung des Chats akzeptierst du diese Bedingungen.</strong></p>
+        <p><strong>1. Respektvoller Umgang</strong><br>
+        Behandle alle Nutzerinnen und Nutzer höflich und respektvoll. Keine Beleidigungen, Drohungen, persönlichen Angriffe oder abwertende Kommentare.</p>
+
+        <p><strong>2. Keine extremen Inhalte</strong><br>
+        Strikt verboten sind insbesondere:
+        <ul>
+          <li>Hassrede oder Hetze</li>
+          <li>Nazi-Begriffe oder Symbole</li>
+          <li>Rassismus, Sexismus, Diskriminierung</li>
+          <li>Gewaltverherrlichung</li>
+        </ul>
+        </p>
+
+        <p><strong>3. Keine Gerüchte oder Falschmeldungen</strong><br>
+        Bitte nur Informationen teilen, die du selbst erlebt hast oder guten Gewissens weitergeben kannst. Bewusst falsche Behauptungen oder Unterstellungen werden entfernt.</p>
+
+        <p><strong>4. Privatsphäre beachten</strong><br>
+        Veröffentliche keine privaten Daten (Adressen, Telefonnummern, interne Vereinsinformationen, private Chats oder Screenshots).</p>
+
+        <p><strong>5. Moderation</strong><br>
+        Die Moderation kann Nachrichten löschen, Verwarnungen aussprechen, Nutzer stummschalten (Mute), aus dem Chat entfernen (Kick) oder dauerhaft sperren (Ban). Die Entscheidungen der Moderation sind verbindlich.</p>
+
+        <p><strong>6. Anonyme Nutzung</strong><br>
+        Anonyme Teilnahme ist erlaubt, solange die Regeln eingehalten werden. Missbrauch kann sofort zu Mute oder Ban führen.</p>
+
+        <p><strong>7. Meldung von Verstößen</strong><br>
+        Wenn du einen Regelverstoß bemerkst, melde ihn bitte der Moderation.</p>
+      </div>
+
+      <div class="rules-footer">
+        <label>
+          <input type="checkbox" id="rulesAccept">
+          Ich habe die Chatregeln gelesen und akzeptiere sie.
+        </label>
+        <div class="login-buttons">
+          <button class="btn-google" id="loginGoogle" disabled>Mit Google anmelden</button>
+          <button class="btn-email" id="loginEmail" disabled>Mit E‑Mail anmelden</button>
+          <button class="btn-anon" id="loginAnon" disabled>Anonym starten</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+    import { getAuth, signInAnonymously, signInWithPopup, GoogleAuthProvider,
+              signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+    
+const firebaseConfig = {
+  apiKey: "AIzaSyAh7Pa46urW09CNeEkgvBbviJmBKcqWHKw",
+  authDomain: "buergerliste-wimpassing-chat.firebaseapp.com",
+  databaseURL: "https://buergerliste-wimpassing-chat-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "buergerliste-wimpassing-chat",
+  storageBucket: "buergerliste-wimpassing-chat.firebasestorage.app",
+  messagingSenderId: "99445324857",
+  appId: "1:99445324857:web:bbbd88aff1baf8164be1e8",
+  measurementId: "G-GFTXZXEKS9"
+};
+
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    let currentRoom = "fragen";
+    let unsubMessages = null;
+    let currentUser = null;
+
+    const tabs = document.querySelectorAll('.tab');
+    const messagesEl = document.getElementById('messages');
+    const inputEl = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const roomTitleEl = document.getElementById('room-title');
+    const appContainer = document.getElementById('app-container');
+
+    const rulesOverlay = document.getElementById('rules-overlay');
+    const rulesAccept = document.getElementById('rulesAccept');
+    const loginGoogle = document.getElementById('loginGoogle');
+    const loginEmail = document.getElementById('loginEmail');
+    const loginAnon = document.getElementById('loginAnon');
+    const btnLogout = document.getElementById('btnLogout');
+
+    function roomName(id) {
+      switch(id) {
+        case "fragen": return "Fragen an die Bürgerliste";
+        case "wahlen": return "Wahlen & Politik";
+        case "plauderecke": return "Plauderecke";
+        case "vereine": return "Vereine";
+        default: return id;
+      }
+    }
+
+    function renderMessages(docs) {
+      messagesEl.innerHTML = "";
+      docs.forEach(docSnap => {
+        const data = docSnap.data();
+        const div = document.createElement('div');
+        div.className = 'msg';
+        if (currentUser && data.uid === currentUser.uid) {
+          div.classList.add('me');
+        }
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        const name = data.name || "Anonym";
+        let timeStr = "";
+        if (data.createdAt && data.createdAt.toDate) {
+          const d = data.createdAt.toDate();
+          timeStr = d.toLocaleTimeString("de-AT", {hour:"2-digit", minute:"2-digit"});
+        }
+        meta.textContent = name + (timeStr ? " • " + timeStr : "");
+        const text = document.createElement('div');
+        text.textContent = data.text || "";
+        div.appendChild(meta);
+        div.appendChild(text);
+        messagesEl.appendChild(div);
+      });
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    async function subscribeRoom(roomId) {
+      currentRoom = roomId;
+      roomTitleEl.textContent = roomName(roomId);
+      if (unsubMessages) unsubMessages();
+      const q = query(
+        collection(db, "rooms", roomId, "messages"),
+        orderBy("createdAt","asc")
+      );
+      unsubMessages = onSnapshot(q, (snap) => {
+        renderMessages(snap.docs);
+      });
+    }
+
+    async function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text || !currentUser) return;
+      try {
+        await addDoc(collection(db, "rooms", currentRoom, "messages"), {
+          text,
+          uid: currentUser.uid,
+          name: currentUser.displayName || currentUser.email || "Anonym",
+          createdAt: serverTimestamp()
+        });
+        inputEl.value = "";
+      } catch (e) {
+        console.error("sendMessage error", e);
+      }
+    }
+
+    // Tabs click
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const roomId = tab.getAttribute('data-room');
+        subscribeRoom(roomId);
+      });
+    });
+
+    // Send handlers
+    sendBtn.addEventListener('click', sendMessage);
+    inputEl.addEventListener('keydown', (ev) => {
+      if (ev.key === "Enter" && !ev.shiftKey) {
+        ev.preventDefault();
+        sendMessage();
+      }
+    });
+
+    // Rules checkbox -> enable buttons
+    rulesAccept.addEventListener('change', () => {
+      const enabled = rulesAccept.checked;
+      loginGoogle.disabled = !enabled;
+      loginEmail.disabled = !enabled;
+      loginAnon.disabled = !enabled;
+    });
+
+    // Login methods
+    loginAnon.addEventListener('click', async () => {
+      if (!rulesAccept.checked) return;
+      try {
+        await signInAnonymously(auth);
+        rulesOverlay.style.display = "none";
+      } catch (e) {
+        console.error("anon login error", e);
+        alert("Anonymer Login fehlgeschlagen.");
+      }
+    });
+
+    loginGoogle.addEventListener('click', async () => {
+      if (!rulesAccept.checked) return;
+      try {
+        const provider = new GoogleAuthProvider();
+        await signInWithPopup(auth, provider);
+        rulesOverlay.style.display = "none";
+      } catch (e) {
+        console.error("google login error", e);
+        alert("Google Login fehlgeschlagen.");
+      }
+    });
+
+    loginEmail.addEventListener('click', async () => {
+      if (!rulesAccept.checked) return;
+      const email = prompt("E‑Mail eingeben:");
+      if (!email) return;
+      const pw = prompt("Passwort eingeben (mind. 6 Zeichen):");
+      if (!pw) return;
+      try {
+        // Erst versuchen anzumelden, sonst registrieren
+        try {
+          await signInWithEmailAndPassword(auth, email, pw);
+        } catch (e1) {
+          await createUserWithEmailAndPassword(auth, email, pw);
+        }
+        rulesOverlay.style.display = "none";
+      } catch (e) {
+        console.error("email login error", e);
+        alert("E‑Mail Login/Registrierung fehlgeschlagen.");
+      }
+    });
+
+    btnLogout.addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        currentUser = null;
+        if (unsubMessages) unsubMessages();
+        appContainer.style.display = "none";
+        rulesOverlay.style.display = "flex";
+        rulesAccept.checked = false;
+        loginGoogle.disabled = true;
+        loginEmail.disabled = true;
+        loginAnon.disabled = true;
+      } catch (e) {
+        console.error("logout error", e);
+      }
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+      if (user) {
+        appContainer.style.display = "flex";
+        subscribeRoom(currentRoom);
+      }
+    });
+  </script>
+</body>
+</html>
